@@ -13,6 +13,10 @@ DB_PASSWORD = "Passwordd"
 DB_HOST = "35.188.97.184"
 DB_PORT = "5432"
 
+@app.route('/')
+def hello_world():
+    return "hello world!"
+
 # Route to retrieve polygon as GeoJSON
 @app.route('/get_polygon_geojson')
 def get_polygon_geojson():
@@ -40,4 +44,4 @@ def get_polygon_geojson():
     return jsonify(row)
 
 if __name__ == '__main__':
-    app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
+    app.run(debug=False, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))

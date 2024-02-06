@@ -1,2 +1,2 @@
-Flask==2.2.5
-pyscopg2==2.9.3
+Flask
+pyscopg2

@@ -33,7 +33,26 @@ def get_polygon_geojson():
     cur = conn.cursor()
 
     # Execute SQL query to retrieve the polygon
-    cur.execute("SELECT ST_AsGeoJSON(shape) AS geojson FROM arclab1 LIMIT 1;")
+    cur.execute("""SELECT 
+            json_build_object(
+                'type', 'FeatureCollection',
+                'features', json_agg(
+                    json_build_object(
+                        'type', 'Feature',
+                        'geometry', ST_AsGeoJSON(ST_SetSRID(shape, 4326))::json,
+                        'properties', json_build_object()
+                    )
+                ),
+                'crs', 
+                json_build_object(
+                    'type', 'name',
+                    'properties', 
+                    json_build_object(
+                        'name', 'urn:ogc:def:crs:OGC:1.3:CRS84'
+                    )
+                )
+            ) AS geojson
+        FROM arclab1""")
     row = cur.fetchone()[0]
 
     # Close cursor and connection

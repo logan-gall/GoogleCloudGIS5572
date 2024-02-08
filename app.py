@@ -48,7 +48,7 @@ def get_polygon_geojson():
                     'type', 'name',
                     'properties', 
                     json_build_object(
-                        'name', 'urn:ogc:def:crs:OGC:1.3:CRS84'
+                        'name', 'EPSG:4326'
                     )
                 )
             ) AS geojson

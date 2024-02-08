@@ -34,14 +34,14 @@ def get_polygon_geojson():
 
     # Execute SQL query to retrieve the polygon
     cur.execute("SELECT ST_AsGeoJSON(shape) AS geojson FROM arclab1 LIMIT 1;")
-    row = cur.fetchone()
+    row = cur.fetchone()[0]
 
     # Close cursor and connection
     cur.close()
     conn.close()
 
     # Return the GeoJSON
-    return jsonify(row)
+    return row
 
 if __name__ == '__main__':
     app.run(debug=False, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))

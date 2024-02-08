@@ -18,7 +18,7 @@ def hello_world():
     return "hello world!"
 
 # Route to retrieve polygon as GeoJSON
-@app.route('/get_polygon_geojson')
+@app.route('/geojson_polygon')
 def get_polygon_geojson():
     # Connect to the database
     conn = psycopg2.connect(

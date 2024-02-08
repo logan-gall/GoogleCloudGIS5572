@@ -13,6 +13,23 @@ DB_PASSWORD = "Passwordd"
 DB_HOST = "35.188.97.184"
 DB_PORT = "5432"
 
+# Function to convert the original JSON text into a GeoJSON FeatureCollection
+def convert_to_geojson_feature_collection(original_json_text):
+    # Assuming original_json_text is a list with a single JSON text element
+    geometry = json.loads(original_json_text[0])
+    
+    geojson_feature_collection = {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature",
+                "properties": {},  # Add any relevant properties here
+                "geometry": geometry
+            }
+        ]
+    }
+    return geojson_feature_collection
+
 @app.route('/')
 def hello_world():
     return "hello world!"
@@ -39,9 +56,12 @@ def get_polygon_geojson():
     # Close cursor and connection
     cur.close()
     conn.close()
-
-    # Return the GeoJSON
-    return jsonify(row)
+    
+    geojson_data = convert_to_geojson_feature_collection(row)
+    
+    #Return geojson
+    return jsonify(geojson_data)
+    
 
 if __name__ == '__main__':
     app.run(debug=False, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))

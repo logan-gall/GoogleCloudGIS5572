@@ -85,7 +85,7 @@ def elevation_universalkriging_point():
                         'features', json_agg(
                             json_build_object(
                                 'type', 'Feature',
-                                'geometry', ST_AsGeoJSON(ST_SetSRID(shape, 26915))::json,
+                                'geometry', ST_AsGeoJSON(ST_Transform(ST_SetSRID(shape, 26915), 4326))::json,
                                 'properties', json_build_object(
                                     'objectid', objectid,
                                     'pointid', pointid,
@@ -98,7 +98,7 @@ def elevation_universalkriging_point():
                             'type', 'name',
                             'properties', 
                             json_build_object(
-                                'name', 'EPSG:26915'
+                                'name', 'EPSG:4326'
                             )
                         )
                     ) AS geojson

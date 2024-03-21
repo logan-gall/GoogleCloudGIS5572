@@ -154,7 +154,7 @@ def elevation_accuracy():
                             )
                         )
                     ) AS geojson
-                FROM elevation_universalkriging_point;
+                FROM elevation_accuracy;
                 """)
     rows = cur.fetchone()[0]
 
@@ -258,7 +258,7 @@ def temperature_accuracy():
                             )
                         )
                     ) AS geojson
-                FROM temperature_universalkriging_point;
+                FROM temperature_accuracy;
                 """)
     rows = cur.fetchone()[0]
 

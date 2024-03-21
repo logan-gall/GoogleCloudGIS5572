@@ -115,6 +115,59 @@ def elevation_universalkriging_point():
 
 
 # Route to retrieve polygon as GeoJSON
+@app.route('/elevation_accuracy')
+def elevation_accuracy():
+    # Connect to the database
+    conn = psycopg2.connect(
+        dbname=DB_NAME,
+        user=DB_USER,
+        password=DB_PASSWORD,
+        host=DB_HOST,
+        port=DB_PORT
+    )
+
+    # Create a cursor
+    cur = conn.cursor()
+
+    # Execute SQL query to retrieve the polygon
+    cur.execute("""SELECT 
+                    json_build_object(
+                        'type', 'FeatureCollection',
+                        'features', json_agg(
+                            json_build_object(
+                                'type', 'Feature',
+                                'geometry', ST_AsGeoJSON(ST_Transform(ST_SetSRID(shape, 26915), 4326))::json,
+                                'properties', json_build_object(
+                                    'objectid', objectid,
+                                    'elevation', elevation,
+                                    'rastervalu', rastervalu,
+                                    'diff_value', diff_value
+                                )
+                            )
+                        ),
+                        'crs', 
+                        json_build_object(
+                            'type', 'name',
+                            'properties', 
+                            json_build_object(
+                                'name', 'EPSG:4326'
+                            )
+                        )
+                    ) AS geojson
+                FROM elevation_universalkriging_point;
+                """)
+    rows = cur.fetchone()[0]
+
+    # Close cursor and connection
+    cur.close()
+    conn.close()
+
+    # Return the GeoJSON
+    return rows
+
+
+
+# Route to retrieve polygon as GeoJSON
 @app.route('/temperature_interpolation')
 def temperature_universalkriging_point():
     # Connect to the database
@@ -141,6 +194,58 @@ def temperature_universalkriging_point():
                                     'objectid', objectid,
                                     'pointid', pointid,
                                     'grid_code', grid_code
+                                )
+                            )
+                        ),
+                        'crs', 
+                        json_build_object(
+                            'type', 'name',
+                            'properties', 
+                            json_build_object(
+                                'name', 'EPSG:4326'
+                            )
+                        )
+                    ) AS geojson
+                FROM temperature_universalkriging_point;
+                """)
+    rows = cur.fetchone()[0]
+
+    # Close cursor and connection
+    cur.close()
+    conn.close()
+
+    # Return the GeoJSON
+    return rows
+
+
+# Route to retrieve polygon as GeoJSON
+@app.route('/temperature_accuracy')
+def temperature_accuracy():
+    # Connect to the database
+    conn = psycopg2.connect(
+        dbname=DB_NAME,
+        user=DB_USER,
+        password=DB_PASSWORD,
+        host=DB_HOST,
+        port=DB_PORT
+    )
+
+    # Create a cursor
+    cur = conn.cursor()
+
+    # Execute SQL query to retrieve the polygon
+    cur.execute("""SELECT 
+                    json_build_object(
+                        'type', 'FeatureCollection',
+                        'features', json_agg(
+                            json_build_object(
+                                'type', 'Feature',
+                                'geometry', ST_AsGeoJSON(ST_SetSRID(shape, 4326))::json,
+                                'properties', json_build_object(
+                                    'objectid', objectid,
+                                    'tmax', tmax,
+                                    'rastervalu', rastervalu,
+                                    'diff_value, diff_value
                                 )
                             )
                         ),

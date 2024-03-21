@@ -245,7 +245,7 @@ def temperature_accuracy():
                                     'objectid', objectid,
                                     'tmax', tmax,
                                     'rastervalu', rastervalu,
-                                    'diff_value, diff_value
+                                    'diff_value', diff_value
                                 )
                             )
                         ),

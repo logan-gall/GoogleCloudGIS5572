@@ -65,7 +65,7 @@ def get_polygon_geojson():
 
 # Route to retrieve polygon as GeoJSON
 @app.route('/elevation_interpolation')
-def get_elevation_interpolation():
+def elevation_universalkriging_point():
     # Connect to the database
     conn = psycopg2.connect(
         dbname=DB_NAME,
@@ -104,7 +104,7 @@ def get_elevation_interpolation():
                     ) AS geojson
                 FROM elevation_universalkriging_point;
                 """)
-    rows = cur.fetchall()
+    rows = cur.fetchone()[0]
 
     # Close cursor and connection
     cur.close()

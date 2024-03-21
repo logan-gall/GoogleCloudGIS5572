@@ -1,3 +1,2 @@
 Flask
-pyscopg2
 psycopg2-binary

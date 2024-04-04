@@ -291,7 +291,7 @@ def delta_cost_map():
                         'features', json_agg(
                             json_build_object(
                                 'type', 'Feature',
-                                'geometry', ST_AsGeoJSON(ST_Transform(ST_SetSRID(shape, 26915), 4326))::json,
+                                'geometry', ST_AsGeoJSON(ST_Transform(ST_SetSRID(geom, 26915), 4326))::json,
                                 'properties', json_build_object(
                                     'delta_cost', delta_cost
                                 )

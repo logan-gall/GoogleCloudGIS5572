@@ -268,6 +268,54 @@ def temperature_accuracy():
 
     # Return the GeoJSON
     return rows
+    
+# Route to retrieve polygon as GeoJSON
+@app.route('/delta_cost_map')
+def delta_cost_map():
+    # Connect to the database
+    conn = psycopg2.connect(
+        dbname=DB_NAME,
+        user=DB_USER,
+        password=DB_PASSWORD,
+        host=DB_HOST,
+        port=DB_PORT
+    )
+
+    # Create a cursor
+    cur = conn.cursor()
+
+    # Execute SQL query to retrieve the polygon
+    cur.execute("""SELECT 
+                    json_build_object(
+                        'type', 'FeatureCollection',
+                        'features', json_agg(
+                            json_build_object(
+                                'type', 'Feature',
+                                'geometry', ST_AsGeoJSON(ST_Transform(ST_SetSRID(shape, 26915), 4326))::json,
+                                'properties', json_build_object(
+                                    'delta_cost', delta_cost
+                                )
+                            )
+                        ),
+                        'crs', 
+                        json_build_object(
+                            'type', 'name',
+                            'properties', 
+                            json_build_object(
+                                'name', 'EPSG:4326'
+                            )
+                        )
+                    ) AS geojson
+                FROM delta_cost_map;
+                """)
+    rows = cur.fetchone()[0]
+
+    # Close cursor and connection
+    cur.close()
+    conn.close()
+
+    # Return the GeoJSON
+    return rows
 
 
 if __name__ == '__main__':

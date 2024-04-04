@@ -306,7 +306,7 @@ def delta_cost_map():
                             )
                         )
                     ) AS geojson
-                FROM temperature_universalkriging_point;
+                FROM delta_cost_map;
                 """)
     rows = cur.fetchone()[0]
 
